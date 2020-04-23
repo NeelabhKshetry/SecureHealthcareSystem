@@ -11,7 +11,8 @@ namespace HealthcareSystemDesign.Migrations
                 name: "daily_report",
                 columns: table => new
                 {
-                    report_id = table.Column<int>(nullable: false),
+                    report_id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     report_date = table.Column<DateTime>(type: "date", nullable: false),
                     no_patients = table.Column<int>(nullable: false),
                     doctor_name = table.Column<string>(unicode: false, maxLength: 100, nullable: false),
@@ -19,14 +20,15 @@ namespace HealthcareSystemDesign.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__daily_re__779B7C584332640F", x => x.report_id);
+                    table.PrimaryKey("PK__daily_re__779B7C5892511693", x => x.report_id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Doctor",
                 columns: table => new
                 {
-                    doctor_id = table.Column<int>(nullable: false),
+                    doctor_id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     doctor_name = table.Column<string>(unicode: false, maxLength: 100, nullable: false),
                     salary = table.Column<double>(nullable: false),
                     doctor_email = table.Column<string>(unicode: false, maxLength: 100, nullable: false)
@@ -40,19 +42,21 @@ namespace HealthcareSystemDesign.Migrations
                 name: "medicalreport_type",
                 columns: table => new
                 {
-                    medicalreport_id = table.Column<int>(nullable: false),
+                    medicalreport_id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     report_type = table.Column<string>(unicode: false, maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__medicalr__9B8597D501EC7947", x => x.medicalreport_id);
+                    table.PrimaryKey("PK__medicalr__9B8597D519BC88A0", x => x.medicalreport_id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "monthly_report",
                 columns: table => new
                 {
-                    report_id = table.Column<int>(nullable: false),
+                    report_id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     report_month = table.Column<DateTime>(type: "date", nullable: false),
                     no_patients = table.Column<int>(nullable: false),
                     doctor_name = table.Column<string>(unicode: false, maxLength: 100, nullable: false),
@@ -60,14 +64,15 @@ namespace HealthcareSystemDesign.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__monthly___779B7C58824CEC36", x => x.report_id);
+                    table.PrimaryKey("PK__monthly___779B7C58C4F06107", x => x.report_id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Patient",
                 columns: table => new
                 {
-                    patient_id = table.Column<int>(nullable: false),
+                    patient_id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     patient_name = table.Column<string>(unicode: false, maxLength: 100, nullable: false),
                     patient_email = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
                     address = table.Column<string>(unicode: false, maxLength: 200, nullable: false),
@@ -94,7 +99,7 @@ namespace HealthcareSystemDesign.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Doctor_u__1F48084F4F7F1A4F", x => x.unavailability);
+                    table.PrimaryKey("PK__Doctor_u__1F48084FE3C91B96", x => x.unavailability);
                     table.ForeignKey(
                         name: "FK__Doctor_un__docto__3E52440B",
                         column: x => x.doctor_id,
@@ -107,7 +112,8 @@ namespace HealthcareSystemDesign.Migrations
                 name: "Nurse",
                 columns: table => new
                 {
-                    nurse_id = table.Column<int>(nullable: false),
+                    nurse_id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     nurse_name = table.Column<string>(unicode: false, maxLength: 100, nullable: false),
                     salary = table.Column<double>(nullable: false),
                     nurse_email = table.Column<string>(unicode: false, maxLength: 100, nullable: false),
@@ -128,7 +134,8 @@ namespace HealthcareSystemDesign.Migrations
                 name: "Appointment",
                 columns: table => new
                 {
-                    appt_id = table.Column<int>(nullable: false),
+                    appt_id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     appt_date = table.Column<DateTime>(type: "date", nullable: false),
                     appointment_reason = table.Column<string>(unicode: false, maxLength: 500, nullable: true),
                     patient_email = table.Column<string>(unicode: false, maxLength: 100, nullable: false),
@@ -138,7 +145,7 @@ namespace HealthcareSystemDesign.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Appointm__E43EE996A79E0621", x => x.appt_id);
+                    table.PrimaryKey("PK__Appointm__E43EE996B49BCAA1", x => x.appt_id);
                     table.ForeignKey(
                         name: "FK__Appointme__docto__30F848ED",
                         column: x => x.doctor_id,
@@ -157,7 +164,8 @@ namespace HealthcareSystemDesign.Migrations
                 name: "Billing",
                 columns: table => new
                 {
-                    billing_id = table.Column<int>(nullable: false),
+                    billing_id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     billing_date = table.Column<DateTime>(type: "date", nullable: false),
                     billing_amount = table.Column<double>(nullable: false),
                     paid = table.Column<bool>(nullable: false),
@@ -180,12 +188,13 @@ namespace HealthcareSystemDesign.Migrations
                 {
                     medicalreport_name = table.Column<string>(unicode: false, maxLength: 200, nullable: false),
                     report_file = table.Column<byte[]>(maxLength: 1, nullable: false),
-                    medicalreport_id = table.Column<int>(nullable: false),
+                    medicalreport_id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     patient_id = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Medical___4756A6E81FA73CBD", x => x.medicalreport_name);
+                    table.PrimaryKey("PK__Medical___4756A6E8DD1A89CE", x => x.medicalreport_name);
                     table.ForeignKey(
                         name: "FK__Medical_R__medic__49C3F6B7",
                         column: x => x.medicalreport_id,
@@ -213,7 +222,7 @@ namespace HealthcareSystemDesign.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Visit_Re__4D5CE4761E964A42", x => x.patient_id);
+                    table.PrimaryKey("PK__Visit_Re__4D5CE4760AF2029A", x => x.patient_id);
                     table.ForeignKey(
                         name: "FK__Visit_Rec__docto__3B75D760",
                         column: x => x.doctor_id,
@@ -232,7 +241,8 @@ namespace HealthcareSystemDesign.Migrations
                 name: "Billing_type",
                 columns: table => new
                 {
-                    billingtype_id = table.Column<int>(nullable: false),
+                    billingtype_id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     billing_name = table.Column<string>(unicode: false, maxLength: 20, nullable: false),
                     billing_id = table.Column<int>(nullable: false)
                 },
@@ -258,7 +268,7 @@ namespace HealthcareSystemDesign.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Card_Pay__8E861397F266045F", x => x.reference_no);
+                    table.PrimaryKey("PK__Card_Pay__8E8613978E4C79B7", x => x.reference_no);
                     table.ForeignKey(
                         name: "FK__Card_Paym__billi__46E78A0C",
                         column: x => x.billing_id,
@@ -271,14 +281,15 @@ namespace HealthcareSystemDesign.Migrations
                 name: "Cash_Payment",
                 columns: table => new
                 {
-                    payment_id = table.Column<int>(nullable: false),
+                    payment_id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     payment_date = table.Column<DateTime>(type: "date", nullable: false),
                     payment_amount = table.Column<double>(nullable: false),
                     billing_id = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Cash_Pay__ED1FC9EA9C60FDAE", x => x.payment_id);
+                    table.PrimaryKey("PK__Cash_Pay__ED1FC9EABA761058", x => x.payment_id);
                     table.ForeignKey(
                         name: "FK__Cash_Paym__billi__440B1D61",
                         column: x => x.billing_id,
@@ -295,10 +306,11 @@ namespace HealthcareSystemDesign.Migrations
                     payment_amount = table.Column<double>(nullable: false),
                     payment_date = table.Column<DateTime>(type: "date", nullable: false),
                     billing_id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Check_Pa__C0EA50AF0D940E2F", x => x.check_no);
+                    table.PrimaryKey("PK__Check_Pa__C0EA50AF0CBB878C", x => x.check_no);
                     table.ForeignKey(
                         name: "FK__Check_Pay__billi__412EB0B6",
                         column: x => x.billing_id,

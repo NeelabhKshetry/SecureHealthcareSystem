@@ -31,18 +31,16 @@ namespace HealthcareSystemDesign.Models
         public virtual DbSet<Patient> Patient { get; set; }
         public virtual DbSet<VisitRecord> VisitRecord { get; set; }
 
-      
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Appointment>(entity =>
             {
                 entity.HasKey(e => e.ApptId)
-                    .HasName("PK__Appointm__E43EE996A79E0621");
+                    .HasName("PK__Appointm__E43EE996B49BCAA1");
 
-                entity.Property(e => e.ApptId)
-                    .HasColumnName("appt_id")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.ApptId).HasColumnName("appt_id");
 
                 entity.Property(e => e.AppointmentReason)
                     .HasColumnName("appointment_reason")
@@ -79,9 +77,7 @@ namespace HealthcareSystemDesign.Models
 
             modelBuilder.Entity<Billing>(entity =>
             {
-                entity.Property(e => e.BillingId)
-                    .HasColumnName("billing_id")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.BillingId).HasColumnName("billing_id");
 
                 entity.Property(e => e.BillingAmount).HasColumnName("billing_amount");
 
@@ -104,9 +100,7 @@ namespace HealthcareSystemDesign.Models
             {
                 entity.ToTable("Billing_type");
 
-                entity.Property(e => e.BillingtypeId)
-                    .HasColumnName("billingtype_id")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.BillingtypeId).HasColumnName("billingtype_id");
 
                 entity.Property(e => e.BillingId).HasColumnName("billing_id");
 
@@ -126,7 +120,7 @@ namespace HealthcareSystemDesign.Models
             modelBuilder.Entity<CardPayment>(entity =>
             {
                 entity.HasKey(e => e.ReferenceNo)
-                    .HasName("PK__Card_Pay__8E861397F266045F");
+                    .HasName("PK__Card_Pay__8E8613978E4C79B7");
 
                 entity.ToTable("Card_Payment");
 
@@ -153,13 +147,11 @@ namespace HealthcareSystemDesign.Models
             modelBuilder.Entity<CashPayment>(entity =>
             {
                 entity.HasKey(e => e.PaymentId)
-                    .HasName("PK__Cash_Pay__ED1FC9EA9C60FDAE");
+                    .HasName("PK__Cash_Pay__ED1FC9EABA761058");
 
                 entity.ToTable("Cash_Payment");
 
-                entity.Property(e => e.PaymentId)
-                    .HasColumnName("payment_id")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.PaymentId).HasColumnName("payment_id");
 
                 entity.Property(e => e.BillingId).HasColumnName("billing_id");
 
@@ -179,7 +171,7 @@ namespace HealthcareSystemDesign.Models
             modelBuilder.Entity<CheckPayment>(entity =>
             {
                 entity.HasKey(e => e.CheckNo)
-                    .HasName("PK__Check_Pa__C0EA50AF0D940E2F");
+                    .HasName("PK__Check_Pa__C0EA50AF0CBB878C");
 
                 entity.ToTable("Check_Payment");
 
@@ -187,7 +179,9 @@ namespace HealthcareSystemDesign.Models
                     .HasColumnName("check_no")
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.BillingId).HasColumnName("billing_id");
+                entity.Property(e => e.BillingId)
+                    .HasColumnName("billing_id")
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.PaymentAmount).HasColumnName("payment_amount");
 
@@ -205,13 +199,11 @@ namespace HealthcareSystemDesign.Models
             modelBuilder.Entity<DailyReport>(entity =>
             {
                 entity.HasKey(e => e.ReportId)
-                    .HasName("PK__daily_re__779B7C584332640F");
+                    .HasName("PK__daily_re__779B7C5892511693");
 
                 entity.ToTable("daily_report");
 
-                entity.Property(e => e.ReportId)
-                    .HasColumnName("report_id")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.ReportId).HasColumnName("report_id");
 
                 entity.Property(e => e.DailyIncome).HasColumnName("daily_income");
 
@@ -230,9 +222,7 @@ namespace HealthcareSystemDesign.Models
 
             modelBuilder.Entity<Doctor>(entity =>
             {
-                entity.Property(e => e.DoctorId)
-                    .HasColumnName("doctor_id")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.DoctorId).HasColumnName("doctor_id");
 
                 entity.Property(e => e.DoctorEmail)
                     .IsRequired()
@@ -252,7 +242,7 @@ namespace HealthcareSystemDesign.Models
             modelBuilder.Entity<DoctorUnavailability>(entity =>
             {
                 entity.HasKey(e => e.Unavailability)
-                    .HasName("PK__Doctor_u__1F48084F4F7F1A4F");
+                    .HasName("PK__Doctor_u__1F48084FE3C91B96");
 
                 entity.ToTable("Doctor_unavailability");
 
@@ -272,7 +262,7 @@ namespace HealthcareSystemDesign.Models
             modelBuilder.Entity<MedicalReport>(entity =>
             {
                 entity.HasKey(e => e.MedicalreportName)
-                    .HasName("PK__Medical___4756A6E81FA73CBD");
+                    .HasName("PK__Medical___4756A6E8DD1A89CE");
 
                 entity.ToTable("Medical_Report");
 
@@ -281,7 +271,9 @@ namespace HealthcareSystemDesign.Models
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
-                entity.Property(e => e.MedicalreportId).HasColumnName("medicalreport_id");
+                entity.Property(e => e.MedicalreportId)
+                    .HasColumnName("medicalreport_id")
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.PatientId).HasColumnName("patient_id");
 
@@ -306,13 +298,11 @@ namespace HealthcareSystemDesign.Models
             modelBuilder.Entity<MedicalreportType>(entity =>
             {
                 entity.HasKey(e => e.MedicalreportId)
-                    .HasName("PK__medicalr__9B8597D501EC7947");
+                    .HasName("PK__medicalr__9B8597D519BC88A0");
 
                 entity.ToTable("medicalreport_type");
 
-                entity.Property(e => e.MedicalreportId)
-                    .HasColumnName("medicalreport_id")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.MedicalreportId).HasColumnName("medicalreport_id");
 
                 entity.Property(e => e.ReportType)
                     .IsRequired()
@@ -324,13 +314,11 @@ namespace HealthcareSystemDesign.Models
             modelBuilder.Entity<MonthlyReport>(entity =>
             {
                 entity.HasKey(e => e.ReportId)
-                    .HasName("PK__monthly___779B7C58824CEC36");
+                    .HasName("PK__monthly___779B7C58C4F06107");
 
                 entity.ToTable("monthly_report");
 
-                entity.Property(e => e.ReportId)
-                    .HasColumnName("report_id")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.ReportId).HasColumnName("report_id");
 
                 entity.Property(e => e.DoctorName)
                     .IsRequired()
@@ -349,9 +337,7 @@ namespace HealthcareSystemDesign.Models
 
             modelBuilder.Entity<Nurse>(entity =>
             {
-                entity.Property(e => e.NurseId)
-                    .HasColumnName("nurse_id")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.NurseId).HasColumnName("nurse_id");
 
                 entity.Property(e => e.DoctorId).HasColumnName("doctor_id");
 
@@ -378,9 +364,7 @@ namespace HealthcareSystemDesign.Models
 
             modelBuilder.Entity<Patient>(entity =>
             {
-                entity.Property(e => e.PatientId)
-                    .HasColumnName("patient_id")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.PatientId).HasColumnName("patient_id");
 
                 entity.Property(e => e.Address)
                     .IsRequired()
@@ -438,7 +422,7 @@ namespace HealthcareSystemDesign.Models
             modelBuilder.Entity<VisitRecord>(entity =>
             {
                 entity.HasKey(e => e.PatientId)
-                    .HasName("PK__Visit_Re__4D5CE4761E964A42");
+                    .HasName("PK__Visit_Re__4D5CE4760AF2029A");
 
                 entity.ToTable("Visit_Record");
 

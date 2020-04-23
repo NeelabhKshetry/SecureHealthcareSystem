@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthcareSystemDesign.Migrations
 {
     [DbContext(typeof(healthcareContext))]
-    [Migration("20200423221342_Models")]
+    [Migration("20200423233450_Models")]
     partial class Models
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,8 +24,10 @@ namespace HealthcareSystemDesign.Migrations
             modelBuilder.Entity("HealthcareSystemDesign.Models.Appointment", b =>
                 {
                     b.Property<int>("ApptId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("appt_id")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AppointmentReason")
                         .HasColumnName("appointment_reason")
@@ -57,7 +59,7 @@ namespace HealthcareSystemDesign.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("ApptId")
-                        .HasName("PK__Appointm__E43EE996A79E0621");
+                        .HasName("PK__Appointm__E43EE996B49BCAA1");
 
                     b.HasIndex("DoctorId");
 
@@ -69,8 +71,10 @@ namespace HealthcareSystemDesign.Migrations
             modelBuilder.Entity("HealthcareSystemDesign.Models.Billing", b =>
                 {
                     b.Property<int>("BillingId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("billing_id")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<double>("BillingAmount")
                         .HasColumnName("billing_amount")
@@ -98,8 +102,10 @@ namespace HealthcareSystemDesign.Migrations
             modelBuilder.Entity("HealthcareSystemDesign.Models.BillingType", b =>
                 {
                     b.Property<int>("BillingtypeId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("billingtype_id")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("BillingId")
                         .HasColumnName("billing_id")
@@ -140,7 +146,7 @@ namespace HealthcareSystemDesign.Migrations
                         .HasColumnType("date");
 
                     b.HasKey("ReferenceNo")
-                        .HasName("PK__Card_Pay__8E861397F266045F");
+                        .HasName("PK__Card_Pay__8E8613978E4C79B7");
 
                     b.HasIndex("BillingId");
 
@@ -150,8 +156,10 @@ namespace HealthcareSystemDesign.Migrations
             modelBuilder.Entity("HealthcareSystemDesign.Models.CashPayment", b =>
                 {
                     b.Property<int>("PaymentId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("payment_id")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("BillingId")
                         .HasColumnName("billing_id")
@@ -166,7 +174,7 @@ namespace HealthcareSystemDesign.Migrations
                         .HasColumnType("date");
 
                     b.HasKey("PaymentId")
-                        .HasName("PK__Cash_Pay__ED1FC9EA9C60FDAE");
+                        .HasName("PK__Cash_Pay__ED1FC9EABA761058");
 
                     b.HasIndex("BillingId");
 
@@ -180,8 +188,10 @@ namespace HealthcareSystemDesign.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("BillingId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("billing_id")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<double>("PaymentAmount")
                         .HasColumnName("payment_amount")
@@ -192,7 +202,7 @@ namespace HealthcareSystemDesign.Migrations
                         .HasColumnType("date");
 
                     b.HasKey("CheckNo")
-                        .HasName("PK__Check_Pa__C0EA50AF0D940E2F");
+                        .HasName("PK__Check_Pa__C0EA50AF0CBB878C");
 
                     b.HasIndex("BillingId");
 
@@ -202,8 +212,10 @@ namespace HealthcareSystemDesign.Migrations
             modelBuilder.Entity("HealthcareSystemDesign.Models.DailyReport", b =>
                 {
                     b.Property<int>("ReportId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("report_id")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<double>("DailyIncome")
                         .HasColumnName("daily_income")
@@ -225,7 +237,7 @@ namespace HealthcareSystemDesign.Migrations
                         .HasColumnType("date");
 
                     b.HasKey("ReportId")
-                        .HasName("PK__daily_re__779B7C584332640F");
+                        .HasName("PK__daily_re__779B7C5892511693");
 
                     b.ToTable("daily_report");
                 });
@@ -233,8 +245,10 @@ namespace HealthcareSystemDesign.Migrations
             modelBuilder.Entity("HealthcareSystemDesign.Models.Doctor", b =>
                 {
                     b.Property<int>("DoctorId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("doctor_id")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("DoctorEmail")
                         .IsRequired()
@@ -270,7 +284,7 @@ namespace HealthcareSystemDesign.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Unavailability")
-                        .HasName("PK__Doctor_u__1F48084F4F7F1A4F");
+                        .HasName("PK__Doctor_u__1F48084FE3C91B96");
 
                     b.HasIndex("DoctorId");
 
@@ -286,8 +300,10 @@ namespace HealthcareSystemDesign.Migrations
                         .IsUnicode(false);
 
                     b.Property<int>("MedicalreportId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("medicalreport_id")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("PatientId")
                         .HasColumnName("patient_id")
@@ -300,7 +316,7 @@ namespace HealthcareSystemDesign.Migrations
                         .HasMaxLength(1);
 
                     b.HasKey("MedicalreportName")
-                        .HasName("PK__Medical___4756A6E81FA73CBD");
+                        .HasName("PK__Medical___4756A6E8DD1A89CE");
 
                     b.HasIndex("MedicalreportId");
 
@@ -312,8 +328,10 @@ namespace HealthcareSystemDesign.Migrations
             modelBuilder.Entity("HealthcareSystemDesign.Models.MedicalreportType", b =>
                 {
                     b.Property<int>("MedicalreportId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("medicalreport_id")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ReportType")
                         .IsRequired()
@@ -323,7 +341,7 @@ namespace HealthcareSystemDesign.Migrations
                         .IsUnicode(false);
 
                     b.HasKey("MedicalreportId")
-                        .HasName("PK__medicalr__9B8597D501EC7947");
+                        .HasName("PK__medicalr__9B8597D519BC88A0");
 
                     b.ToTable("medicalreport_type");
                 });
@@ -331,8 +349,10 @@ namespace HealthcareSystemDesign.Migrations
             modelBuilder.Entity("HealthcareSystemDesign.Models.MonthlyReport", b =>
                 {
                     b.Property<int>("ReportId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("report_id")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("DoctorName")
                         .IsRequired()
@@ -354,7 +374,7 @@ namespace HealthcareSystemDesign.Migrations
                         .HasColumnType("date");
 
                     b.HasKey("ReportId")
-                        .HasName("PK__monthly___779B7C58824CEC36");
+                        .HasName("PK__monthly___779B7C58C4F06107");
 
                     b.ToTable("monthly_report");
                 });
@@ -362,8 +382,10 @@ namespace HealthcareSystemDesign.Migrations
             modelBuilder.Entity("HealthcareSystemDesign.Models.Nurse", b =>
                 {
                     b.Property<int>("NurseId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("nurse_id")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("DoctorId")
                         .HasColumnName("doctor_id")
@@ -397,8 +419,10 @@ namespace HealthcareSystemDesign.Migrations
             modelBuilder.Entity("HealthcareSystemDesign.Models.Patient", b =>
                 {
                     b.Property<int>("PatientId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("patient_id")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -503,7 +527,7 @@ namespace HealthcareSystemDesign.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("PatientId")
-                        .HasName("PK__Visit_Re__4D5CE4761E964A42");
+                        .HasName("PK__Visit_Re__4D5CE4760AF2029A");
 
                     b.HasIndex("DoctorId");
 
