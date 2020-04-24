@@ -1,5 +1,8 @@
 ﻿@model IEnumerable<HealthcareSystemDesign.Models.Billing>
-
+@{@using Microsoft.Extensions.Options
+@inject IOptions<HealthcareSystemDesign.StripeSettings> Stripe
+ViewData["Title"] = "Home Page";
+}
 @{
     ViewData["Title"] = "Index";
 }
@@ -28,26 +31,43 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.BillingDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BillingAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Paid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Patient.Address)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.BillingId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.BillingId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.BillingId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BillingDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BillingAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Paid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Patient.Address)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.BillingId">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.BillingId">Delete</a> |
+                    <a asp-action="Details" asp-route-id="@item.BillingId">Download Invoice</a> |
+
+                 </td>
+                <td>
+                       <div class="text-center">
+
+
+                        <form asp-action="Charge" asp-controller="Billings" asp-route-id="@item.BillingId" method="POST">
+                            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                    data-key="@Stripe.Value.PublishableKey"
+                                    data-description="Invoice Payment"
+                                    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                                    data-locale="auto">
+                            </script>
+                        </form>
+                    </div>
+
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HealthcareSystemDesign.Models;
+using Rotativa.AspNetCore;
 
 namespace HealthcareSystemDesign.Controllers
 {
@@ -39,7 +40,7 @@ namespace HealthcareSystemDesign.Controllers
                 return NotFound();
             }
 
-            return View(medicalreportType);
+            return new ViewAsPdf(medicalreportType);
         }
 
         // GET: MedicalreportTypes/Create

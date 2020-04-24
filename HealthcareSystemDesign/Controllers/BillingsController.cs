@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HealthcareSystemDesign.Models;
+using Stripe;
+using Rotativa.AspNetCore;
 
 namespace HealthcareSystemDesign.Controllers
 {
@@ -41,9 +43,52 @@ namespace HealthcareSystemDesign.Controllers
                 return NotFound();
             }
 
-            return View(billing);
+            return new ViewAsPdf(billing);
         }
 
+        //Card payment using stripe
+        public async Task<IActionResult> Charge(int? id, string stripeEmail, string stripeToken)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var billing = await _context.Billing
+                .Include(b => b.Patient)
+                .FirstOrDefaultAsync(m => m.BillingId == id);
+            if (billing == null)
+            {
+                return NotFound();
+            }
+
+            //Create stripe charge
+            var customers = new CustomerService();
+            var charges = new ChargeService();
+
+            var customer = customers.Create(new CustomerCreateOptions
+            {
+                Email = stripeEmail,
+                Source = stripeToken
+            });
+            var charge = charges.Create(new ChargeCreateOptions
+            {
+                Amount = (long)billing.BillingAmount * 100,
+                Description = "Invoice",
+                Currency = "usd",
+                Customer = customer.Id,
+                ReceiptEmail = stripeEmail
+            });
+
+
+            if (charge.Status == "succeeded")
+            {
+
+                return RedirectToAction("Index");
+            }
+            else { }
+            return View("Index", "Billings");
+        }
         // GET: Billings/Create
         public IActionResult Create()
         {
