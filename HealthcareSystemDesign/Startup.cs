@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Hangfire;
 using Hangfire.MemoryStorage;
 using Stripe;
-using Rotativa.AspNetCore;
+//using Rotativa.AspNetCore;
 
 namespace HealthcareSystemDesign
 {
@@ -96,7 +96,7 @@ namespace HealthcareSystemDesign
                 endpoints.MapRazorPages();
             });
 
-            RotativaConfiguration.Setup(env.ContentRootPath, "wwwroot/Rotativa");
+            //RotativaConfiguration.Setup(env.ContentRootPath, "wwwroot/Rotativa");
             app.UseHangfireDashboard();
 
             //backgroundJobClient.Enqueue<JobScheduling>(x => x.ClearAppointment());
