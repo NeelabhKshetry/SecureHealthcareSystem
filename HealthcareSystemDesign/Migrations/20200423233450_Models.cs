@@ -7,7 +7,7 @@ namespace HealthcareSystemDesign.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
+           /* migrationBuilder.CreateTable(
                 name: "daily_report",
                 columns: table => new
                 {
@@ -377,7 +377,7 @@ namespace HealthcareSystemDesign.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Visit_Record_doctor_id",
                 table: "Visit_Record",
-                column: "doctor_id");
+                column: "doctor_id");*/
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -428,4 +428,5 @@ namespace HealthcareSystemDesign.Migrations
                 name: "Patient");
         }
     }
+
 }
