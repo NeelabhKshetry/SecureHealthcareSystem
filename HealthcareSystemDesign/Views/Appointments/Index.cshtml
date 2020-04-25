@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+@*<h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -62,4 +62,69 @@
         </tr>
 }
     </tbody>
+    *@
+
+
+
+    
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <title>Patient Appointments Page</title>
+        <link rel="stylesheet" href="~/BootStrap Views Assets - Do Not Touch/Patients/Index/assets/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="~/BootStrap Views Assets - Do Not Touch/Patients/Index/assets/fonts/font-awesome.min.css">
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+
+        <link rel="stylesheet" href="~/BootStrap Views Assets - Do Not Touch/Patients/Index/assets/css/styles.min.css">
+
+    </head>
+
+<body>
+    <section>
+        <div class="row">
+            <div class="col">
+                <p style="font-size: 30px;filter: brightness(138%);background-color: #676161;">Upcoming Appointments</p>
+            </div>
+        </div>
+        <div class="row" id="appointments">
+            <!-- Start: Table With Search -->
+            <div class="col-md-12 d-flex search-table-col">
+                <span class="counter pull-right"></span>
+                <div class="table-responsive table-bordered table table-hover table-bordered results">
+                    <table class="table table-bordered table-hover">
+                        <thead class="border rounded-0 bill-header cs">
+                            @foreach (var record in Model) {
+                            <tr>
+                                <th id="trs-hd" class="col-lg-1"> @Html.DisplayFor(entry => record.ApptId) </th>
+                                <th id="trs-hd" class="col-lg-2">@Html.DisplayFor(entry => record.PatientEmail)</th>
+                                <th id="trs-hd" class="col-lg-2">Appointment Date</th>
+                                <th id="trs-hd-1" class="col-lg-2">Actions</th>
+                            </tr>
+                            }
+                        </thead>
+                        <tbody>
+                            
+                            <tr>
+                                <td>01</td>
+                                <td>India</td>
+                                <td>Souvik Kundu</td>
+                                <td>
+                                    <button class="btn btn-success border rounded" data-toggle="tooltip" data-bs-tooltip="" data-placement="bottom" data-bs-hover-animate="jello" style="margin-left: 5px;" type="submit" title="Modify Appointment"><i class="fa fa-refresh" style="font-size: 15px;"></i></button>
+                                    <button class="btn btn-danger" data-toggle="tooltip" data-bs-tooltip="" data-placement="bottom" data-bs-hover-animate="wobble" style="margin-left: 5px;" type="submit" title="Delete Appointment">
+                                        <i class="fa fa-trash" style="font-size: 15px;"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- End: Table With Search -->
+        </div>
+    </section>
+    <script src="~/BootStrap Views Assets - Do Not Touch/Patients/Index/assets/js/jquery.min.js"></script>
+    <script src="~/BootStrap Views Assets - Do Not Touch/Patients/Index/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/BootStrap Views Assets - Do Not Touch/Patients/Index/assets/js/script.min.js"></script>
+</body>
 </table>
