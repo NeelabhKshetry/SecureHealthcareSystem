@@ -51,7 +51,9 @@ ViewData["Title"] = "Home Page";
                     <a asp-action="Delete" asp-route-id="@item.BillingId">Delete</a> |
                     <a asp-action="Details" asp-route-id="@item.BillingId">Download Invoice</a> |
 
-                 </td>
+                    <a asp-action="Create" asp-controller="CashPayments" asp-route-id="@item.BillingId">Cash Payment</a> |
+                    <a asp-action="Create" asp-controller="CheckPayments" asp-route-id="@item.BillingId">Check Payment</a> |
+                </td>
                 <td>
                        <div class="text-center">
 

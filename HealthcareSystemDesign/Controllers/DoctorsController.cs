@@ -98,6 +98,7 @@ namespace HealthcareSystemDesign.Controllers
                 {
                     _context.Update(doctor);
                     await _context.SaveChangesAsync();
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {

@@ -65,12 +65,16 @@ namespace HealthcareSystemDesign.Controllers
             //Create stripe charge
             var customers = new CustomerService();
             var charges = new ChargeService();
-
+           
             var customer = customers.Create(new CustomerCreateOptions
             {
                 Email = stripeEmail,
-                Source = stripeToken
+                Source = stripeToken,
+               
+                
             });
+            
+
             var charge = charges.Create(new ChargeCreateOptions
             {
                 Amount = (long)billing.BillingAmount * 100,
@@ -78,11 +82,28 @@ namespace HealthcareSystemDesign.Controllers
                 Currency = "usd",
                 Customer = customer.Id,
                 ReceiptEmail = stripeEmail
+                
+                                
             });
+            //
 
 
             if (charge.Status == "succeeded")
             {
+                //Add payment record to card payment
+                if (ModelState.IsValid) {
+
+                 /// Use charge id as reference no  
+                var newpayment = new CardPayment { PaymentDate = DateTime.Now, PaymentAmount = billing.BillingAmount, BillingId = (int)id, ReferenceNo = charge.Id };
+                _context.Add(newpayment);
+                await _context.SaveChangesAsync();
+
+                 //Update the paid starus in the invoice
+                 billing.Paid = true;
+                 await _context.SaveChangesAsync();
+                }
+
+               
 
                 return RedirectToAction("Index");
             }

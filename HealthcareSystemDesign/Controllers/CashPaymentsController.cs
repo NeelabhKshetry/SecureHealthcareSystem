@@ -45,9 +45,11 @@ namespace HealthcareSystemDesign.Controllers
         }
 
         // GET: CashPayments/Create
-        public IActionResult Create()
+        public IActionResult Create(int ? id)
         {
-            ViewData["BillingId"] = new SelectList(_context.Billing, "BillingId", "BillingId");
+            
+            ViewData["PaymentAmount"] = new SelectList(_context.Billing, "BillingId", "BillingAmount", id);
+            ViewData["BillingId"] = new SelectList(_context.Billing, "BillingId", "BillingId", id);
             return View();
         }
 
@@ -62,7 +64,13 @@ namespace HealthcareSystemDesign.Controllers
             {
                 _context.Add(cashPayment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                //Update the paid status in the billing 
+                var billing = await _context.Billing.FindAsync(cashPayment.BillingId);
+                billing.Paid = true;
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index", "Billings");
             }
             ViewData["BillingId"] = new SelectList(_context.Billing, "BillingId", "BillingId", cashPayment.BillingId);
             return View(cashPayment);
