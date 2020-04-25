@@ -29,6 +29,7 @@ namespace HealthcareSystemDesign
             Configuration = configuration;
         }
 
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -50,6 +51,7 @@ namespace HealthcareSystemDesign
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DataConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
 
@@ -61,7 +63,7 @@ namespace HealthcareSystemDesign
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
         }
         //Create admin role
-       /* private async Task CreateUserRoles(IServiceProvider serviceProvider)
+        private async Task CreateUserRoles(IServiceProvider serviceProvider)
         {
             var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var UserManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
@@ -129,7 +131,7 @@ namespace HealthcareSystemDesign
             }
             var doctor = new IdentityUser
             {
-                UserName = "doctor",
+                UserName = "doctor@myhealthcare.com",
                 Email = "doctor@myhealthcare.com",
                 EmailConfirmed = true,
 
@@ -142,12 +144,12 @@ namespace HealthcareSystemDesign
                 var createpoweruser = await UserManager.CreateAsync(doctor, "Superuser1!");
                 if (createpoweruser.Succeeded)
                 {
-                    await UserManager.AddToRoleAsync(admin, "Admin");
+                    await UserManager.AddToRoleAsync(admin, "Doctor");
                 }
 
             }
             //Nurse
-           
+
             var nurseCheck = await RoleManager.RoleExistsAsync("Nurse");
             if (!nurseCheck)
             {
@@ -169,15 +171,22 @@ namespace HealthcareSystemDesign
                 var createpoweruser = await UserManager.CreateAsync(nurse, "Superuser1!");
                 if (createpoweruser.Succeeded)
                 {
-                    await UserManager.AddToRoleAsync(admin, "Nurse");
+                    await UserManager.AddToRoleAsync(nurse, "Nurse");
                 }
 
             }
+            // Patient, create only patient role
+            var patientroleCheck = await RoleManager.RoleExistsAsync("Patient");
+            if (!patientroleCheck)
+            {
+                //create the roles and seed them to the database
+                await RoleManager.CreateAsync(new IdentityRole("Patient"));
+            }
 
-        }*/
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         [Obsolete]
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IBackgroundJobClient backgroundJobClient, IRecurringJobManager recurringJobManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IBackgroundJobClient backgroundJobClient, IRecurringJobManager recurringJobManager, IServiceProvider serviceProvider)
         {
             
             //Stripe Payment
@@ -209,6 +218,8 @@ namespace HealthcareSystemDesign
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+            //Create user roles
+            CreateUserRoles(serviceProvider).Wait();
 
             RotativaConfiguration.Setup(env.ContentRootPath, "wwwroot/Rotativa");
             app.UseHangfireDashboard();

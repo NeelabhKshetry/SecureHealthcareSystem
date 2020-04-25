@@ -27,6 +27,13 @@ namespace HealthcareSystemDesign.Controllers
             return View(await healthcareContext.ToListAsync());
         }
 
+        //Search invoice without logging in 
+        public IActionResult SearchInvoice( string billingid, double billingamount)
+        {
+
+            return View();
+        }
+
         // GET: Billings/Details/5
         public async Task<IActionResult> Details(int? id)
         {
