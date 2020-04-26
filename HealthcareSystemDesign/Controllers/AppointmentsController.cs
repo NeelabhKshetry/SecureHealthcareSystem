@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HealthcareSystemDesign.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HealthcareSystemDesign.Controllers
 {
+    [Authorize]
     public class AppointmentsController : Controller
     {
         private readonly healthcareContext _context;
@@ -21,12 +23,29 @@ namespace HealthcareSystemDesign.Controllers
         // GET: Appointments
         public async Task<IActionResult> Index()
         {
-            var healthcareContext = _context.Appointment.Include(a => a.Doctor).Include(a => a.Patient);
-            return View(await healthcareContext.ToListAsync());
+            if (User.IsInRole("Patient"))
+            {
+                var healthcareContext = _context.Appointment.Include(a => a.Doctor).Include(a => a.Patient).Where(c => c.PatientEmail == User.Identity.Name);
+
+                return View(await healthcareContext.ToListAsync());
+            }
+            else if (User.IsInRole("Staff"))
+            {
+                Console.WriteLine(" User is in Role");
+                var healthcareContext = _context.Appointment.Include(a => a.Doctor).Include(a => a.Patient);
+                return View(await healthcareContext.ToListAsync());
+            }
+            else
+                return View("NotAllowed");
         }
 
-        // GET: Appointments/Details/5
-        public async Task<IActionResult> Details(int? id)
+    
+
+
+
+
+    // GET: Appointments/Details/5
+    public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {

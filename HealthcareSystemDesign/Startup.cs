@@ -104,7 +104,7 @@ namespace HealthcareSystemDesign
             }
             var staff = new IdentityUser
             {
-                UserName = "staff",
+                UserName = "staff@myhealthcare.com",
                 Email = "staff@myhealthcare.com",
                 EmailConfirmed = true,
 
@@ -117,7 +117,7 @@ namespace HealthcareSystemDesign
                 var createpoweruser = await UserManager.CreateAsync(staff, "Superuser1!");
                 if (createpoweruser.Succeeded)
                 {
-                    await UserManager.AddToRoleAsync(admin, "Staff");
+                    await UserManager.AddToRoleAsync(staff, "Staff");
                 }
 
             }

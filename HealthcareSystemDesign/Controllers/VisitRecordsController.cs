@@ -84,6 +84,8 @@ namespace HealthcareSystemDesign.Controllers
             {
                 return NotFound();
             }
+
+           
             ViewData["DoctorId"] = new SelectList(_context.Doctor, "DoctorId", "DoctorEmail", visitRecord.DoctorId);
             ViewData["PatientId"] = new SelectList(_context.Patient, "PatientId", "Address", visitRecord.PatientId);
             return View(visitRecord);
@@ -105,6 +107,13 @@ namespace HealthcareSystemDesign.Controllers
             {
                 try
                 {
+                    //Create Invoice for Copay
+                    if (visitRecord.Visited == true)
+                    {
+                        _context.Update(visitRecord);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("Create" , "Billings", visitRecord.PatientId); 
+                        }
                     _context.Update(visitRecord);
                     await _context.SaveChangesAsync();
                 }
@@ -161,5 +170,6 @@ namespace HealthcareSystemDesign.Controllers
         {
             return _context.VisitRecord.Any(e => e.PatientId == id);
         }
+      
     }
 }
