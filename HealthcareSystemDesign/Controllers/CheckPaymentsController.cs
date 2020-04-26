@@ -45,9 +45,11 @@ namespace HealthcareSystemDesign.Controllers
         }
 
         // GET: CheckPayments/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
-            ViewData["BillingId"] = new SelectList(_context.Billing, "BillingId", "BillingId");
+
+            ViewData["PaymentAmount"] = new SelectList(_context.Billing, "BillingId", "BillingAmount", id);
+            ViewData["BillingId"] = new SelectList(_context.Billing, "BillingId", "BillingId", id);
             return View();
         }
 
@@ -61,6 +63,11 @@ namespace HealthcareSystemDesign.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(checkPayment);
+                await _context.SaveChangesAsync();
+
+                //Update the paid status in the billing 
+                var billing = await _context.Billing.FindAsync(checkPayment.BillingId);
+                billing.Paid = true;
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

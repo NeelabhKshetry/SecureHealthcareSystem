@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HealthcareSystemDesign.Models;
+using Stripe;
+using Rotativa.AspNetCore;
 
 namespace HealthcareSystemDesign.Controllers
 {
@@ -25,6 +27,13 @@ namespace HealthcareSystemDesign.Controllers
             return View(await healthcareContext.ToListAsync());
         }
 
+        //Search invoice without logging in 
+        public IActionResult SearchInvoice( string billingid, double billingamount)
+        {
+
+            return View();
+        }
+
         // GET: Billings/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -41,9 +50,73 @@ namespace HealthcareSystemDesign.Controllers
                 return NotFound();
             }
 
-            return View(billing);
+            return new ViewAsPdf(billing);
         }
 
+        //Card payment using stripe
+        public async Task<IActionResult> Charge(int? id, string stripeEmail, string stripeToken)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var billing = await _context.Billing
+                .Include(b => b.Patient)
+                .FirstOrDefaultAsync(m => m.BillingId == id);
+            if (billing == null)
+            {
+                return NotFound();
+            }
+
+            //Create stripe charge
+            var customers = new CustomerService();
+            var charges = new ChargeService();
+           
+            var customer = customers.Create(new CustomerCreateOptions
+            {
+                Email = stripeEmail,
+                Source = stripeToken,
+               
+                
+            });
+            
+
+            var charge = charges.Create(new ChargeCreateOptions
+            {
+                Amount = (long)billing.BillingAmount * 100,
+                Description = "Invoice",
+                Currency = "usd",
+                Customer = customer.Id,
+                ReceiptEmail = stripeEmail
+                
+                                
+            });
+            //
+
+
+            if (charge.Status == "succeeded")
+            {
+                //Add payment record to card payment
+                if (ModelState.IsValid) {
+
+                 /// Use charge id as reference no  
+                var newpayment = new CardPayment { PaymentDate = DateTime.Now, PaymentAmount = billing.BillingAmount, BillingId = (int)id, ReferenceNo = charge.Id };
+                _context.Add(newpayment);
+                await _context.SaveChangesAsync();
+
+                 //Update the paid starus in the invoice
+                 billing.Paid = true;
+                 await _context.SaveChangesAsync();
+                }
+
+               
+
+                return RedirectToAction("Index");
+            }
+            else { }
+            return View("Index", "Billings");
+        }
         // GET: Billings/Create
         public IActionResult Create()
         {

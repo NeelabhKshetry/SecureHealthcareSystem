@@ -6,18 +6,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HealthcareSystemDesign.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace HealthcareSystemDesign.Controllers
 {
     public class DoctorsController : Controller
     {
         private readonly healthcareContext _context;
+       
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signManager;
 
-        public DoctorsController(healthcareContext context)
+        public DoctorsController(healthcareContext context, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signManager)
         {
             _context = context;
+            _userManager = userManager;
+            _signManager = signManager;
         }
-
+    
         // GET: Doctors
         public async Task<IActionResult> Index()
         {
@@ -59,6 +65,29 @@ namespace HealthcareSystemDesign.Controllers
             {
                 _context.Add(doctor);
                 await _context.SaveChangesAsync();
+
+                // Create doctor using the email and default password
+
+                var doctoraccount = new IdentityUser
+                {
+                    UserName = doctor.DoctorEmail,
+                    Email = doctor.DoctorEmail,
+                    EmailConfirmed = true,
+
+
+                };
+
+                var user = await _userManager.FindByEmailAsync(doctor.DoctorEmail);
+                if (user == null)
+                {
+                    var createpoweruser = await _userManager.CreateAsync(doctoraccount, "Superuser1!");
+                    if (createpoweruser.Succeeded)
+                    {
+                        await _userManager.AddToRoleAsync(doctoraccount, "Doctor");
+                    }
+
+                }
+              
                 return RedirectToAction(nameof(Index));
             }
             return View(doctor);
@@ -98,6 +127,7 @@ namespace HealthcareSystemDesign.Controllers
                 {
                     _context.Update(doctor);
                     await _context.SaveChangesAsync();
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -148,5 +178,6 @@ namespace HealthcareSystemDesign.Controllers
         {
             return _context.Doctor.Any(e => e.DoctorId == id);
         }
+        
     }
 }

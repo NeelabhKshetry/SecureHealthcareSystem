@@ -30,6 +30,7 @@ namespace HealthcareSystemDesign
             Env = env;
         }
 
+
         public IConfiguration Configuration { get; }
 
         public IWebHostEnvironment Env { get; }
@@ -55,6 +56,7 @@ namespace HealthcareSystemDesign
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DataConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
 
@@ -74,10 +76,131 @@ namespace HealthcareSystemDesign
 
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
         }
+        //Create admin role
+        private async Task CreateUserRoles(IServiceProvider serviceProvider)
+        {
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var UserManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
+
+            //Adding Admin Role and default admin user
+            var roleCheck = await RoleManager.RoleExistsAsync("CEO");
+            if (!roleCheck)
+            {
+                //create the roles and seed them to the database
+                await RoleManager.CreateAsync(new IdentityRole("CEO"));
+            }
+            var admin = new IdentityUser
+            {
+                UserName = "admin",
+                Email = "admin@myhealthcare.com",
+                EmailConfirmed = true,
+
+
+            };
+
+            var user = await UserManager.FindByEmailAsync("admin@myhealthcare.com");
+            if (user == null)
+            {
+                var createpoweruser = await UserManager.CreateAsync(admin, "Superuser1!");
+                if (createpoweruser.Succeeded)
+                {
+                    await UserManager.AddToRoleAsync(admin, "CEO");
+                }
+
+            }
+            //Staff Role and generic staff email
+            var staffCheck = await RoleManager.RoleExistsAsync("Staff");
+            if (!staffCheck)
+            {
+                //create the roles and seed them to the database
+                await RoleManager.CreateAsync(new IdentityRole("Staff"));
+            }
+            var staff = new IdentityUser
+            {
+                UserName = "staff",
+                Email = "staff@myhealthcare.com",
+                EmailConfirmed = true,
+
+
+            };
+
+            var staffuser = await UserManager.FindByEmailAsync("staff@myhealthcare.com");
+            if (staffuser == null)
+            {
+                var createpoweruser = await UserManager.CreateAsync(staff, "Superuser1!");
+                if (createpoweruser.Succeeded)
+                {
+                    await UserManager.AddToRoleAsync(admin, "Staff");
+                }
+
+            }
+
+            //Doctor role and generic staff addition
+            var doctorCheck = await RoleManager.RoleExistsAsync("Doctor");
+            if (!doctorCheck)
+            {
+                //create the roles and seed them to the database
+                await RoleManager.CreateAsync(new IdentityRole("Doctor"));
+            }
+            var doctor = new IdentityUser
+            {
+                UserName = "doctor@myhealthcare.com",
+                Email = "doctor@myhealthcare.com",
+                EmailConfirmed = true,
+
+
+            };
+
+            var doctoruser = await UserManager.FindByEmailAsync("doctor@myhealthcare.com");
+            if (doctoruser == null)
+            {
+                var createpoweruser = await UserManager.CreateAsync(doctor, "Superuser1!");
+                if (createpoweruser.Succeeded)
+                {
+                    await UserManager.AddToRoleAsync(admin, "Doctor");
+                }
+
+            }
+            //Nurse
+
+            var nurseCheck = await RoleManager.RoleExistsAsync("Nurse");
+            if (!nurseCheck)
+            {
+                //create the roles and seed them to the database
+                await RoleManager.CreateAsync(new IdentityRole("Nurse"));
+            }
+            var nurse = new IdentityUser
+            {
+                UserName = "nurse",
+                Email = "nurse@myhealthcare.com",
+                EmailConfirmed = true,
+
+
+            };
+
+            var nurseuser = await UserManager.FindByEmailAsync("nurse@myhealthcare.com");
+            if (nurseuser == null)
+            {
+                var createpoweruser = await UserManager.CreateAsync(nurse, "Superuser1!");
+                if (createpoweruser.Succeeded)
+                {
+                    await UserManager.AddToRoleAsync(nurse, "Nurse");
+                }
+
+            }
+            // Patient, create only patient role
+            var patientroleCheck = await RoleManager.RoleExistsAsync("Patient");
+            if (!patientroleCheck)
+            {
+                //create the roles and seed them to the database
+                await RoleManager.CreateAsync(new IdentityRole("Patient"));
+            }
+
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         [Obsolete]
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IBackgroundJobClient backgroundJobClient, IRecurringJobManager recurringJobManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IBackgroundJobClient backgroundJobClient, IRecurringJobManager recurringJobManager, IServiceProvider serviceProvider)
         {
             app.UseBrowserLink();
             //Stripe Payment
@@ -109,6 +232,8 @@ namespace HealthcareSystemDesign
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+            //Create user roles
+            CreateUserRoles(serviceProvider).Wait();
 
             //RotativaConfiguration.Setup(env.ContentRootPath, "wwwroot/Rotativa");
             app.UseHangfireDashboard();

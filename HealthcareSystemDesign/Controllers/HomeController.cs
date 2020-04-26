@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using HealthcareSystemDesign.Models;
+using Stripe;
 
 namespace HealthcareSystemDesign.Controllers
 {
@@ -22,7 +23,8 @@ namespace HealthcareSystemDesign.Controllers
         {
             return View();
         }
-
+       
+        
         public IActionResult Privacy()
         {
             return View();

@@ -66,6 +66,13 @@ namespace HealthcareSystemDesign.Controllers
             {
                 _context.Add(appointment);
                 await _context.SaveChangesAsync();
+
+                if (appointment.VisitRecord)
+                {
+                    var record = new VisitRecord { VisitDate = DateTime.Now, VisitReason=appointment.AppointmentReason, Prescription="N/A", PatientId= (int) appointment.PatientId, DoctorId= appointment.DoctorId, Visited=false};
+                    _context.Add(record);
+                    await _context.SaveChangesAsync();
+                }
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DoctorId"] = new SelectList(_context.Doctor, "DoctorId", "DoctorEmail", appointment.DoctorId);
@@ -107,6 +114,13 @@ namespace HealthcareSystemDesign.Controllers
             {
                 try
                 {
+                    if (appointment.VisitRecord)
+                    {
+                        var record = new VisitRecord { VisitDate = DateTime.Now, VisitReason = appointment.AppointmentReason, Prescription = "N/A", PatientId = (int)appointment.PatientId, DoctorId = appointment.DoctorId, Visited = true };
+                        _context.Add(record);
+                        await _context.SaveChangesAsync();
+                     
+                    }
                     _context.Update(appointment);
                     await _context.SaveChangesAsync();
                 }
