@@ -7,6 +7,8 @@ namespace HealthcareSystemDesign.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+
+
            /* migrationBuilder.CreateTable(
                 name: "daily_report",
                 columns: table => new
@@ -378,6 +380,7 @@ namespace HealthcareSystemDesign.Migrations
                 name: "IX_Visit_Record_doctor_id",
                 table: "Visit_Record",
                 column: "doctor_id");*/
+
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
