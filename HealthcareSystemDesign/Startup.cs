@@ -18,23 +18,28 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Hangfire;
 using Hangfire.MemoryStorage;
 using Stripe;
-using Rotativa.AspNetCore;
+//using Rotativa.AspNetCore;
 
 namespace HealthcareSystemDesign
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            Env = env;
         }
 
 
         public IConfiguration Configuration { get; }
 
+        public IWebHostEnvironment Env { get; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            var builder = services.AddControllersWithViews();
 
             //Hangfire for recurring jobs
             services.AddHangfire(config =>
@@ -59,7 +64,16 @@ namespace HealthcareSystemDesign
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
+            services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddRazorPages();
+
+#if DEBUG
+            if (Env.IsDevelopment())
+            {
+                builder.AddRazorRuntimeCompilation();
+            }
+#endif
+
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
         }
         //Create admin role
@@ -188,7 +202,7 @@ namespace HealthcareSystemDesign
         [Obsolete]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IBackgroundJobClient backgroundJobClient, IRecurringJobManager recurringJobManager, IServiceProvider serviceProvider)
         {
-            
+            app.UseBrowserLink();
             //Stripe Payment
             StripeConfiguration.SetApiKey(Configuration.GetSection("Stripe")["SecretKey"]);
 
@@ -221,7 +235,7 @@ namespace HealthcareSystemDesign
             //Create user roles
             CreateUserRoles(serviceProvider).Wait();
 
-            RotativaConfiguration.Setup(env.ContentRootPath, "wwwroot/Rotativa");
+            //RotativaConfiguration.Setup(env.ContentRootPath, "wwwroot/Rotativa");
             app.UseHangfireDashboard();
 
             //backgroundJobClient.Enqueue<JobScheduling>(x => x.ClearAppointment());

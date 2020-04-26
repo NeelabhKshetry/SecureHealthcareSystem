@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HealthcareSystemDesign.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HealthcareSystemDesign.Controllers
 {
+    //[Authorize]
     public class AppointmentsController : Controller
     {
         private readonly healthcareContext _context;
