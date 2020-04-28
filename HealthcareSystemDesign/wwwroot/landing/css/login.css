@@ -1,0 +1,57 @@
+* {
+    margin: 0;
+    padding: 0;
+    background-color: #0984e3;
+}
+.blue {
+    background-color: #0984e3;
+}
+.gray {
+    background-color: #dfe6e9;
+}
+
+.input_color {
+    background-color: #b2bec3;
+}
+
+.ccenter {
+    margin: auto;
+}
+
+.no_mp {
+    margin: 0;
+    padding: 0;
+}
+
+.small {
+    font-size: 0.75rem;
+}
+
+.small-space {
+    display: block;
+    height: 0.5rem;
+}
+//------
+
+::placeholder {
+    text-align: center;
+    color: #636e72;
+    font-size: 1.25rem;
+}
+//-----
+.login-container {
+    height: 100%;
+    width: 100%;
+}
+
+.form-container {
+    background-color: #dfe6e9;
+}
+
+.form-group {
+    background-color: #dfe6e9;
+}
+
+.form-control {
+    
+}

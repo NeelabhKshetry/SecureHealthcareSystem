@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewData["Title"] = "SearchInvoice";
+}
+
+<h1>SearchInvoice</h1>
+
+<form asp-controller="Billings" asp-action="SearchInvoice" method="get">
+    <p>
+        Billing Id: <input type="text" name="SearchInvoice">
+        <input type="submit" value="Filter" />
+    </p>
+</form>
