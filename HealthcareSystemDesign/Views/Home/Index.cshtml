@@ -1,11 +1,95 @@
-﻿@{@using Microsoft.Extensions.Options
+@{@using Microsoft.Extensions.Options
 @inject IOptions<HealthcareSystemDesign.StripeSettings> Stripe
 ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<head>
+    .sidenav {
+  height: 100%;
+  width: 160px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
 
-   
-</div>
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+</head>
+
+@if(User.Identity.IsAuthenticated && User.IsInRole("CEO"))
+{
+    <body>
+        <div class="sidenav">
+            <a asp-controller="DailyReports" asp-action="Create">Daily Reports</a>
+            <a asp-controller="MonthlyReports", asp-action="Create">Monthly Reports</a>
+            <a asp-controller="Doctors" asp-action="Index">Doctors</a>
+            <a asp-controller="Patients" asp-action="Index">Patients</a>
+        </div>
+    </body>
+}
+
+@if(User.Identity.IsAuthenticated && User.IsInRole("Doctor"))
+{
+    <body>
+        <div class="sidenav">
+            <a asp-controller="VisitRecords" asp-action="Index">Visit Records</a>
+            <a asp-controller="Appointments" asp-action="Index">My Appointments</a>
+        </div>
+    </body>
+}
+
+@if(User.Identity.IsAuthenticated && User.IsInRole("Nurse"))
+{
+    <body>
+        <div class="sidenav">
+            <a asp-controller="VisitRecords" asp-action="Index">Visit Records</a>
+            <a asp-controller="Appointments" asp-action="Index">My Appointments</a>
+            <a asp-controller="Patients" asp-action="Index">My Patients</a>
+        </div>
+    </body>
+}
+
+@if(User.Identity.IsAuthenticated && User.IsInRole("Patient"))
+{
+    <body>
+        <div class="sidenav">
+            <a asp-controller="Appointments" asp-action="Index">Make Appointment</a>
+            <a asp-controller="Billings" asp-action="Index">Pay an Invoice</a>
+        </div>
+    </body>
+}
+
+@if(User.Identity.IsAuthenticated && User.IsInRole("Staff"))
+{
+    <body>
+        @if(User.Identity.IsAuthenticated && User.IsInRole("Nurse"))
+{
+    <body>
+        <div class="sidenav">
+            <a asp-controller="Appointments" asp-action="Index">Appointments</a>
+            <a asp-controller="Billings" asp-action="Index">Invoices</a>
+            <a asp-controller="DoctorUnavailabilities" asp-action="Index">Add Doctor Unavailibility</a>
+            <a asp-controller="Doctors" asp-action="Index">Add Doctor Availibility</a>
+            <a asp-controller="Patients" asp-action="Index">Add Patient</a>
+        </div>
+    </body>
+}
+    </body>
+}
+
+
+
